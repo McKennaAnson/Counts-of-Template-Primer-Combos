@@ -1,0 +1,54 @@
+
+Function: 
+		The script generates a csv file with the counts of occurences of primer template combinations in sequences, for a specified experiment. 
+	
+	Parameters:
+		run (csv file): SRR Run Accesion IDs list file from the NCBI website (link in "Data Availability" section of the study).
+			Example:
+			_________
+			acc
+			SRR8399425
+			SRR8399453
+			.
+			.
+			.
+			____________
+
+		metadata (csv file): Metadata file from the study ("Supplemental Information" file titled "Table_S5_Meta_Data.xlsx").
+			Example:
+			________________________________________________________________________________________________________________________________________________________
+			Bioproject Accession	SampleID	Biosample Accession		Initial Exp Name	Current Exp Name	PCR Method	Enz		Annealling Temp	................
+			PRJNA513137				A1-45-1		SAMN10696615			A1					A01					DePCR				45C
+			.						.			.						.					.					.					.				................
+			________________________________________________________________________________________________________________________________________________________
+
+		exp_name (str): New experiment name 
+			Example: B27, A10, etc.
+
+		map (csv file): Mapping file from the study ("Supplemental Information" section titled "TableS3.xlsx")
+			Example:
+			__________________________________________________________________________________________________________________________________________________
+			current_template_name	current_primer_name		R_feature_name	template_recognition_sequence	variable poistions -14, -8, -3 from 3' end	......
+			ST0						V0						ST00V00			CGATCTCTACGC					CTA											......
+			.						.						.				.								.											......
+			__________________________________________________________________________________________________________________________________________________
+
+		templates (txt file): User created text file containing a space delinated list of all the templates used for the experiment of interest (Use "Table 1: Experimental pools of primers and templates" from the study to find this informtation).
+			Example: ST0, ST1, ST2 ......
+
+		primers (txt file): User created text file containing a space delinated list of all the primers used for the experiment of interest (Use "Table 1: Experimental pools of primers and templates" from the study to find this informtation).
+			Example: V0, V1, V2 .....
+	
+	Returns: 
+		final_table (csv file): a csv file with the counts of occurences of primer template combinations in sequences, for a specified experiment. Includes metadata information and mismatch matrix. 
+		
+		Example output table (not accurate info, just an example): 
+				_________________________________________________________________________________________________
+					Rpl		Run			Primer_Template_Combo	5'	Middle	3' 	Annealing Temp	PCR Method	Count
+					1		SRR8399877		ST09V34				0		1	0		55C				TAS		50
+					1		SRR8399795		ST09V30				1		0	1		45C				DePCR	100
+					.			.				.				.		.	.		.				.		.	
+					.			.				.				.		.	.		.				.		.
+					8		SRR8399793		ST09V33				0		0	0		55C				DePCR	0
+				__________________________________________________________________________________________________
+	""" 
