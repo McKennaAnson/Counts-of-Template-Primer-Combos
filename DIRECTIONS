@@ -2,6 +2,7 @@ Directions:
 1) Download the files titled Counts_Script.py, metadata.csv, maps.csv and run.csv.
 2) Upload to your home directory.  
 3) Create a text file with the names of the templates (delinated by a space) of your desired experiment from "Table 1: Experimental pools of primers and templates" in the study.
+  * example file is provided in main
 4) Repeate the step 3 process for the primers.
 5) Run the code (make sure to change --exp_name, --templates and --primers to your desired experiment name and text file names).
 
