@@ -5,14 +5,14 @@ Function:
 	Parameters:
 		run (csv file): SRR Run Accesion IDs list file from the NCBI website (link in "Data Availability" section of the study).
 			Example:
-			_________
-			acc
-			SRR8399425
-			SRR8399453
-			.
-			.
-			.
-			____________
+			_________________________________
+			Run			....... BioSample
+			SRR8399425			SAMN10696618
+			SRR8399453			SAMN10696619
+			.					.
+			.					.
+			.					.
+			___________________________________
 
 		metadata (csv file): Metadata file from the study ("Supplemental Information" file titled "Table_S5_Meta_Data.xlsx").
 			Example:
