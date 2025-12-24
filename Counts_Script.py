@@ -324,7 +324,7 @@ def main():
 	#Combines the filtered_meta table from the get_metadata function and the counts_pivot table from the get_counts function
 	counts_meta_table = combine_counts_meta(counts_pivot, filtered_meta)
 
-	#adds the mismatch matrix to the output table from counts_meta_table and saves to a .csv file
+	#adds the mismatch matrix to the output table from counts_meta_table and saves to a .csv file titled "final.csv"
 	final_table = mismatch_matrix(counts_meta_table, filtered_map)
 
 if __name__ == "__main__":
