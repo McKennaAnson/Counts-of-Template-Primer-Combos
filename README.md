@@ -12,6 +12,6 @@ The script is designed to use the data from the study "Quantitating primer-templ
 Example:
 I want to run the script to get counts for the "B27" experiment with the "template.txt" and "primer.txt" files:
 
-  'python3 Counts_Script --run run.csv --meta metadata.csv --exp B27 --map map.csv --t templates.txt --p primers.txt'
+ `python3 Counts_Script --run run.csv --meta metadata.csv --exp B27 --map map.csv --t templates.txt --p primers.txt`
 
 The result will be a csv file called "final.csv" saved to your current working directory. 
