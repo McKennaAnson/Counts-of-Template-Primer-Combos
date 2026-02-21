@@ -24,7 +24,13 @@ Download the following files from the repository and upload them to your home di
 python3 Counts_Script.py --run run.csv --meta metadata.csv --exp B27 --map map.csv --t templates.txt --p primers.txt
 ```
 
----
-
+---			
 ### Output
 A file named `final.csv` will be saved to your current working directory containing the template-primer counts.
+| Rpl | Run | Primer_Template_Combo | 5' | Middle | 3' | Annealing Temp | PCR Method | Count |
+|-----|-----|-----------------------|----|--------|----|----------------|------------|-------|
+| 1 | SRR8399877 | ST09V34 | 0 | 1 | 0 | 55C | TAS | 50 |
+| 1 | SRR8399795 | ST09V30 | 1 | 0 | 1 | 45C | DePCR | 100 |
+| . | . | . | . | . | . | . | . | . |
+| . | . | . | . | . | . | . | . | . |
+| 8 | SRR8399793 | ST09V33 | 0 | 0 | 0 | 55C | DePCR | 0 |
