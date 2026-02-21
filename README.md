@@ -1,7 +1,7 @@
 # Counts-of-Template-Primer-Combos
 The script is designed to use the data from the study "Quantitating primer-template interactions using deconstructed PCR" to create a file with counts of the template primer combinations for statistical analysis. 
 
-Directions for use: 
+### Directions for use: 
 1) Download the files titled Counts_Script.py, metadata.csv, maps.csv and run.csv.
 2) Upload to your home directory.  
 3) Create a text file with the names of the templates (delinated by a space) of your desired experiment from "Table 1: Experimental pools of primers and templates" in the study.
@@ -12,6 +12,6 @@ Directions for use:
 Example:
 I want to run the script to get counts for the "B27" experiment with the "template.txt" and "primer.txt" files:
 
-  python3 Counts_Script --run run.csv --meta metadata.csv --exp B27 --map map.csv --t templates.txt --p primers.txt
+  'python3 Counts_Script --run run.csv --meta metadata.csv --exp B27 --map map.csv --t templates.txt --p primers.txt'
 
 The result will be a csv file called "final.csv" saved to your current working directory. 
