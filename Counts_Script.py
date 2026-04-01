@@ -142,7 +142,7 @@ def get_sequences(run_IDs_list):
 		seq_dict (dictionary): key{SRR run IDs}, value{sequences}
 			Example: key{SRR8399749.fastq}, value{ATCTTGCCGTAAGTC....}
 	"""
-	filepath = '/home/mpa' #hardcoded filepath 
+	filepath = '/home/mpa/fastq' #hardcoded filepath 
 	seq_dict = {}
 	for file in os.listdir(filepath):
 		if file in run_IDs_list:
