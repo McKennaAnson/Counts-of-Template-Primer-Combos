@@ -1,4 +1,5 @@
 # Counts of Template-Primer Combinations
+  # CURRENTLY NOT WORKING PROPERLY 
 
 This script uses data from the study *"Quantitating primer-template interactions using deconstructed PCR"* to generate a counts file of template-primer combinations for statistical analysis.
 
