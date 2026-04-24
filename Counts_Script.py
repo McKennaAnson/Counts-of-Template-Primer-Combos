@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 import sys
 from Bio import SeqIO
@@ -244,54 +245,76 @@ def combine_counts_meta(counts_pivot, filtered_meta):
 def mismatch_matrix(counts_meta_table, filtered_map):
 	"""
 	Function:
-		This function creates columns in the output table counts_meta_table from the function combine_counts_meta, titled 5', Middle, and 3' with values as 0 (no mismatch) or 1 (mismatch). These columns are a matrix that say whether there is a mismatch or no mismatch at the 5', Middle and 3' positions in the primer sequence.
+		This function creates columns in the output table counts_meta_table from the function combine_counts_meta, 
+		titled 5', Middle, and 3' with values showing the nucleotide substitution (e.g., AG, CT, TG) or 0 for no mismatch.
 
 	Parameters:
 		counts_meta_table (pandas dataframe): output from the function combine_counts_meta function.
 		filtered_map (pandas dataframe): output from the function filtered_map.
 
 	Returns: 
-		final_table (pandas dataframe): table with the counts, metadata, and mismatch matrix
+		final_table (pandas dataframe): table with the counts, metadata, and nucleotide substitution matrix
 			Example output table (not accurate info, just an example): 
 				_________________________________________________________________________________________________
-					Rpl		Run			R_feature_name			5'	Middle	3' 	Annealing Temp	PCR Method	Count
-					1		SRR8399877		ST09V34				0		1	0		55C				TAS		50
-					1		SRR8399795		ST09V30				1		0	1		45C				DePCR	100
-					.			.				.				.		.	.		.				.		.	
-					.			.				.				.		.	.		.				.		.
-					8		SRR8399793		ST09V33				0		0	0		55C				DePCR	0
+					Rpl		Run			R_feature_name		5'		Middle	3' 		Annealing Temp	PCR Method	Count
+					1		SRR8399877		ST09V34			0		TG		0		55C				TAS			50
+					1		SRR8399795		ST09V30			CA		0		AT		45C				DePCR		100
+					.		.				.				.		.		.		.				.			.	
+					.		.				.				.		.		.		.				.			.
+					8		SRR8399793		ST09V33			0		0		0		55C				DePCR		0
 				__________________________________________________________________________________________________
-		
-		
 	""" 
-	perfect_match_data = {'templates': ['ST00', 'ST01', 'ST02', 'ST03', 'ST04', 'ST05', 'ST06', 'ST07', 'ST08', 'ST09'],
-					   'perfect_match': ['CTA', 'GTA', 'TTA', 'ATA', 'CAA', 'CCA', 'CGA', 'CTC', 'CTG', 'CTT']}
+	# Perfect match reference sequences for templates ST00-ST09
+	perfect_match_data = {
+		'templates': ['ST00', 'ST01', 'ST02', 'ST03', 'ST04', 'ST05', 'ST06', 'ST07', 'ST08', 'ST09'],
+		'perfect_match': ['CTA', 'GTA', 'TTA', 'ATA', 'CAA', 'CCA', 'CGA', 'CTC', 'CTG', 'CTT']
+	}
 	df = pd.DataFrame(perfect_match_data)
 		
+	# Extract variable positions from mapping file
 	temp_map = filtered_map[['R_feature_name', "variable positions -14,-8,-2 from 3' end"]]
 	final_map = temp_map.rename(columns={"variable positions -14,-8,-2 from 3' end": 'variable'})
 		
+	# Merge with counts table
 	df2 = pd.merge(counts_meta_table, final_map, on='R_feature_name')
 		
-	df2.insert(loc=3, column="5'", value=0)
-	df2.insert(loc=4, column="Middle", value=0)
-	df2.insert(loc=5, column="3'", value=0)
+	# Initialize columns with default value "0"
+	df2.insert(loc=3, column="5'", value="0")
+	df2.insert(loc=4, column="Middle", value="0")
+	df2.insert(loc=5, column="3'", value="0")
 
-	for row in range (len(df2)):
-		for row2 in range (len(df)):
+	# Detect mismatches and record nucleotide substitutions
+	for row in range(len(df2)):
+		for row2 in range(len(df)):
+			# Match template name (first 4 characters)
 			if df2.loc[row, 'R_feature_name'][:4] == df.loc[row2, 'templates'][:4]:
-				str1 = df.loc[row2, 'perfect_match']
-				str2 = df2.loc[row, 'variable']
+				perfect = df.loc[row2, 'perfect_match']  # Perfect match sequence (e.g., "CTA")
+				observed = df2.loc[row, 'variable']       # Observed sequence (e.g., "GCA")
 				
-				df2.loc[row, "5'"] = 1 if str2[0] != str1[0] else 0
-				df2.loc[row, "Middle"] = 1 if str2[1] != str1[1] else 0
-				df2.loc[row, "3'"] = 1 if str2[-1] != str1[-1] else 0
+				# 5' position (position 0)
+				if observed[0] != perfect[0]:
+					df2.loc[row, "5'"] = f"{perfect[0]}{observed[0]}"
+				else:
+					df2.loc[row, "5'"] = "0"
+				
+				# Middle position (position 1)
+				if observed[1] != perfect[1]:
+					df2.loc[row, "Middle"] = f"{perfect[1]}{observed[1]}"
+				else:
+					df2.loc[row, "Middle"] = "0"
+				
+				# 3' position (last position)
+				if observed[-1] != perfect[-1]:
+					df2.loc[row, "3'"] = f"{perfect[-1]}{observed[-1]}"
+				else:
+					df2.loc[row, "3'"] = "0"
 	
+	# Clean up and format output
 	df2 = df2.drop('variable', axis=1)
 	final_table = df2.set_index('Rpl').sort_index()
 
+	# Save to CSV
 	final_table.to_csv('final.csv', index=True)
-	
 	
 	return final_table
 
@@ -324,7 +347,7 @@ def main():
 	#Combines the filtered_meta table from the get_metadata function and the counts_pivot table from the get_counts function
 	counts_meta_table = combine_counts_meta(counts_pivot, filtered_meta)
 
-	#adds the mismatch matrix to the output table from counts_meta_table and saves to a .csv file titled "final.csv"
+	#adds the mismatch matrix with nucleotide substitutions to the output table from counts_meta_table and saves to a .csv file titled "final.csv"
 	final_table = mismatch_matrix(counts_meta_table, filtered_map)
 
 if __name__ == "__main__":
